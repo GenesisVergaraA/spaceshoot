@@ -2,8 +2,8 @@
 <html lang="es">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Space Shooter</title>
   <link rel="stylesheet" href="spaceshoot.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
@@ -11,12 +11,15 @@
 
 <body>
   <div class="game-ui">
-    SCORE: <span id="score">0</span> &nbsp;&nbsp; LIVES: <span id="lives">3</span>
+    <div>SCORE: <span id="score">0</span></div>
+    <div>LIVES: <span id="lives">3</span></div>
   </div>
-  <div id="game-container">
-    <script src="./spaceshoot.js"></script>
-
+  <div id="game-container"></div>
+  <script src="spaceshoot.js"> </script>
+  <div class="mobile-controls">
+    <div class="btn" id="btn-left">⬅️</div>
+    <div class="btn" id="btn-shoot">🔥</div>
+    <div class="btn" id="btn-right">➡️</div>
   </div>
 </body>
-
 </html>

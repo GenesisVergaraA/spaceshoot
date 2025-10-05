@@ -12,6 +12,7 @@ const config = {
 const game = new Phaser.Game(config);
 
 let player, cursors, bullets, asteroids, stars, shootKey, lastShootTime = 0, asteroidTimer, powerups;
+let mobileLeft = false, mobileRight = false, mobileShoot = false;
 
 function preload() {
     this.load.image('playerShip', 'assets/spaceship.png');
@@ -58,6 +59,15 @@ function create() {
     this.physics.add.overlap(player, asteroids, hitPlayer, null, this);
     this.physics.add.overlap(player, powerups, takePowerup, null, this);
 
+    document.getElementById("btn-left").addEventListener("touchstart", () => mobileLeft = true);
+    document.getElementById("btn-left").addEventListener("touchend", () => mobileLeft = false);
+
+    document.getElementById("btn-right").addEventListener("touchstart", () => mobileRight = true);
+    document.getElementById("btn-right").addEventListener("touchend", () => mobileRight = false);
+
+    document.getElementById("btn-shoot").addEventListener("touchstart", () => mobileShoot = true);
+    document.getElementById("btn-shoot").addEventListener("touchend", () => mobileShoot = false);
+
     this.time.addEvent({
         delay: 15000,
         callback: () => {
@@ -73,10 +83,10 @@ function create() {
 
 function update(time) {
     if (gameOver) return;
-    if (cursors.left.isDown) player.x -= playerSpeed;
-    else if (cursors.right.isDown) player.x += playerSpeed;
+    if (cursors.left.isDown || mobileLeft) player.x -= playerSpeed;
+    else if (cursors.right.isDown || mobileRight) player.x += playerSpeed;
     player.x = Phaser.Math.Clamp(player.x, 20, this.sys.game.canvas.width - 20);
-    if (shootKey.isDown && time > lastShootTime + 250) { shoot(this); lastShootTime = time; }
+    if (shootKey.isDown && time > lastShootTime + 250 || mobileShoot && time > lastShootTime + 250 ) { shoot(this); lastShootTime = time; }
     stars.children.entries.forEach(s => { s.y += 1; if (s.y > this.sys.game.canvas.height) { s.y = 0; s.x = Phaser.Math.Between(0, this.sys.game.canvas.width); } });
     asteroids.children.each(a => { if (a.active) this.physics.moveToObject(a, player, 100); });
     bullets.children.each(b => { if (b.y < -50) b.destroy(); });
@@ -118,7 +128,6 @@ function spawnPowerup() {
     const buff = powerups.create(x, -30, type).setScale(0.12).setOrigin(0.5);
     buff.setData('type', type);
     buff.body.setVelocity(0, 120);
-    // animaciones
     this.tweens.add({ targets: buff, angle: 360, duration: 2000, repeat: -1 });
     this.tweens.add({ targets: buff, alpha: { from: 1, to: 0.5 }, duration: 700, yoyo: true, repeat: -1 });
 }
